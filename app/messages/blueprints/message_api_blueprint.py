@@ -8,7 +8,7 @@ message_api_blueprint = Blueprint(
 @message_api_blueprint.get('')
 def api_get_messages():
     messages = get_all_messages()
-    return jsonify([vars(msg)  for msg in messages]), 200
+    return jsonify([vars(msg) for msg in messages]), 200
 
 
 @message_api_blueprint.post('')
@@ -22,7 +22,7 @@ def api_post_message():
 
     if error:
         return jsonify({'message': error}), 422
-    
+
     print(vars(added_message))
     return jsonify(vars(added_message)), 201
 
@@ -35,6 +35,7 @@ def api_get_message(message_id):
 
     return jsonify(vars(message)), 200
 
+
 @message_api_blueprint.post('/<int:message_id>/claps')
 def api_post_clap_message(message_id):
     claps = increment_messsage_claps_by_id(message_id=message_id)
@@ -42,4 +43,3 @@ def api_post_clap_message(message_id):
         return "", 404
 
     return jsonify({'count': claps}), 201
-

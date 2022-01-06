@@ -44,7 +44,7 @@ def find_message_by_id(message_id) -> Optional[Message]:
 
 def find_all_messages() -> list[Message]:
     with conn.cursor() as cursor:
-        cursor.execute('SELECT * FROM messages ORDER BY claps DESC')
+        cursor.execute('SELECT * FROM messages ORDER BY claps DESC, id ASC')
         messages = cursor.fetchall()
         return convert_to_classes(messages)
 
@@ -54,6 +54,7 @@ def increment_messsage_claps_by_id(message_id: int) -> int:
         cursor.execute(
             'UPDATE messages SET claps = claps+1 WHERE id = %s', (message_id,))
 
+        conn.commit()
         message = find_message_by_id(message_id=message_id)
         if not message:
             return None
