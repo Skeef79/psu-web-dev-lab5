@@ -27,17 +27,18 @@ def insert_message(message: Message) -> Message:
                        (message.author,  message.message, message.claps))
         id = cursor.fetchone()[0]
         conn.commit()
-        return Message(id, message.author, message.message, message.claps)
+        return Message(id=id, author=message.author, message=message.message, claps=message.claps)
 
 
 def find_message_by_id(message_id) -> Optional[Message]:
     with conn.cursor() as cursor:
-        cursor.execute('SELECT * FROM messages WHERE id = %s', (message_id,))
+        cursor.execute(
+            'SELECT id, author, message, claps FROM messages WHERE id = %s', (message_id,))
         messages = cursor.fetchall()
         if not messages:
             return None
 
-        message = convert_to_classes(messages)[0]        
+        message = convert_to_classes(messages)[0]
         return message
 
 
@@ -52,9 +53,8 @@ def increment_messsage_claps_by_id(message_id: int) -> int:
     with conn.cursor() as cursor:
         cursor.execute(
             'UPDATE messages SET claps = claps+1 WHERE id = %s', (message_id,))
-        
+
         message = find_message_by_id(message_id=message_id)
         if not message:
             return None
         return message.claps
-

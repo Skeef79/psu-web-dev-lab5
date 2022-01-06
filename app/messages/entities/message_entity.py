@@ -6,4 +6,4 @@ class Message:
         self.id = id
         self.author = author
         self.message = message
-        self.claps = claps if claps else 0
+        self.claps = claps
